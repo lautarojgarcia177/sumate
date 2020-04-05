@@ -1,4 +1,4 @@
-/* import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-productos-edicion',
@@ -13,4 +13,3 @@ export class ProductosEdicionComponent implements OnInit {
   }
 
 }
- */

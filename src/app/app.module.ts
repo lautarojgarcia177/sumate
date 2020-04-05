@@ -23,15 +23,15 @@ import { NavbarComponent } from './components/ui/navbar/navbar.component';
 import { BreadcrumbComponent } from './components/ui/breadcrumb/breadcrumb.component';
 
 import { CategoriasConsultaComponent } from 'src/app/pages/consulta/categorias/categorias-consulta.component';
-// import { ProductosConsultaComponent } from 'src/app/pages/consulta/productos/productos-consulta.component';
+import { ProductosConsultaComponent } from 'src/app/pages/consulta/productos/productos-consulta.component';
 import { MonedasConsultaComponent } from 'src/app/pages/consulta/monedas/monedas-consulta.component';
-//import { EmpresasConsultaComponent } from 'src/app/pages/consulta/empresas/empresas-consulta.component';
+import { EmpresasConsultaComponent } from 'src/app/pages/consulta/empresas/empresas-consulta.component';
 import { CategoriasEdicionComponent } from 'src/app/pages/edicion/categorias/categorias-edicion.component';
-// import { EmpresasEdicionComponent } from 'src/app/pages/edicion/empresas/empresas-edicion.component';
-// import { MonedasEdicionComponent } from 'src/app/pages/edicion/monedas/monedas-edicion.component';
-// import { ProductosEdicionComponent } from 'src/app/pages/edicion/productos/productos-edicion.component';
+import { EmpresasEdicionComponent } from 'src/app/pages/edicion/empresas/empresas-edicion.component';
+import { MonedasEdicionComponent } from 'src/app/pages/edicion/monedas/monedas-edicion.component';
+import { ProductosEdicionComponent } from 'src/app/pages/edicion/productos/productos-edicion.component';
 import { AnimatedTextComponent } from './components/animated-text/animated-text.component';
- import { EditarCategoriaComponent } from 'src/app/pages/edicion/categorias/editar-categoria/editar-categoria.component';
+import { EditarCategoriaComponent } from 'src/app/pages/edicion/categorias/editar-categoria/editar-categoria.component';
 import { AnimatedCheckboxComponent } from './components/animated-checkbox/animated-checkbox.component';
 
 @NgModule({
@@ -43,13 +43,13 @@ import { AnimatedCheckboxComponent } from './components/animated-checkbox/animat
     SubcardComponent,
     LoadingSpinnerComponent,
     CategoriasConsultaComponent,
-//    ProductosConsultaComponent,
+    ProductosConsultaComponent,
     MonedasConsultaComponent,
-//    EmpresasConsultaComponent,
+    EmpresasConsultaComponent,
     CategoriasEdicionComponent,
-//    ProductosEdicionComponent,
-//    EmpresasEdicionComponent,
-//    MonedasEdicionComponent,
+    ProductosEdicionComponent,
+    EmpresasEdicionComponent,
+    MonedasEdicionComponent,
     AnimatedTextComponent,
     EditarCategoriaComponent,
     AnimatedCheckboxComponent

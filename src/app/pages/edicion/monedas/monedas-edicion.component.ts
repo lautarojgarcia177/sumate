@@ -1,4 +1,4 @@
-/* import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CurrenciesService } from '../../../providers/currencies.service';
 import { Currency } from '../../../models/currency.model';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
@@ -78,4 +78,3 @@ export class MonedasEdicionComponent implements OnInit {
 
 
 }
- */

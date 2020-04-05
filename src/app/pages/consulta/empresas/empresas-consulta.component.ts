@@ -1,4 +1,4 @@
-/* import { Company } from './../../../models/company.model';
+import { Company } from './../../../models/company.model';
 import { EmpresasService } from './../../../providers/empresas.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -122,4 +122,3 @@ export class EmpresasConsultaComponent implements OnInit {
     window.location.reload();
   }
 }
- */
