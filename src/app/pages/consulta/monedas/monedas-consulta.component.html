@@ -1,0 +1,59 @@
+<app-animated-text *ngIf="!isLoading" [text]="'Monedas'"></app-animated-text>
+
+<app-loading-spinner class="mt-5" *ngIf="isLoading"></app-loading-spinner>
+
+<div class="pl-5 pr-5 mt-2" *ngIf="!isLoading">
+
+  <div class="form-row">
+      <div class="col-md-8 form-group">
+          <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                  
+                  <div class="btn-group" dropdown>
+                      <button id="button-animated" dropdownToggle type="button" class="btn btn-primary"
+                              aria-controls="dropdown-animated" (click)="clearFilter()">
+                              <i class="fas fa-filter"></i>
+                              <span class="caret"></span>
+                      </button>
+      <!--                 <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu"
+                          role="menu" aria-labelledby="button-animated">
+                          <li class="disabled" role="menuitem"><a class="dropdown-item disabled" href="#">Filtrar por</a></li>
+                          <li class="divider dropdown-divider"></li>
+                          <li role="menuitem"><a class="dropdown-item" href="#">Nombre</a></li>
+                          <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
+                          <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
+                      </ul> -->
+                  </div> 
+              </div>
+              <input
+                  id="filter"
+                  class="form-control"
+                  type="text"
+                  [formControl]="filterquery"
+                  placeholder="Filtrar por Descripcion"
+                  (keyup)="updateFilter($event)"
+              />
+            </div>
+      </div>
+      <div class="col-md-3">
+      <div class="input-group mb-3">
+      <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon3">Mostrar</span>
+      </div>
+      <input type="number" [(ngModel)]="limit" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+      </div>
+  </div>
+  </div>
+  
+  <ngx-datatable class="bootstrap"
+    #table
+    [rows]="rows"
+    [columns]="columns"
+    [columnMode]="ColumnMode.force"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    rowHeight="auto"
+    [limit]="limit"
+    >
+  </ngx-datatable>
+</div>

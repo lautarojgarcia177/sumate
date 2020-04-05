@@ -1,0 +1,33 @@
+<div class="card m-3" style="width: 18rem;">
+    <img [src]="img" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{title}}</h5>
+      <p class="card-text">{{text}}</p>
+      <button *ngIf="!isSubCategory" type="button" class="btn btn-primary" (click)="isNotCollapsed = !isNotCollapsed"
+            [attr.aria-expanded]="!isNotCollapsed" aria-controls="collapseBasic">
+            Ver Sub Categorias <i class="fas fa-chevron-down"></i>
+         </button>
+         <div id="collapseBasic" [collapse]="!isNotCollapsed" [isAnimated]="true">
+            <div class="well well-lg card card-block card-header">
+                <div *ngIf="subCategories.length > 0" class="card-group">
+                    <div *ngFor="let c of subCategories">
+                        <ng-template #popTemplate>
+                            <ul>
+                                <li *ngFor="let pN of c.productNames">{{pN}}</li>
+                            </ul>
+                        </ng-template>
+                        <app-subcard [img]="c.Logo" [title]="c.Name"
+                            [popover]="popTemplate"
+                            triggers="mouseenter:mouseleave"
+                            popoverTitle="Productos:"
+                            placement="auto"
+                            [delay]="300"
+                            container="body"
+                        ></app-subcard>
+                    </div>
+                </div>
+                <p *ngIf="subCategories.length === 0">No hay subcategorias</p>
+            </div>
+          </div>
+    </div>
+  </div>

@@ -1,0 +1,52 @@
+<!-- <app-loading-spinner class="mt-5" *ngIf="isLoading"></app-loading-spinner>
+<app-animated-text class="title-mid" [text]="'Monedas'"></app-animated-text>
+<div class="container-fluid pl-5 pr-5">
+  <form [formGroup]="currenciesForm" (ngSubmit)="onSubmit()">
+    <table class="table" *ngIf="!isLoading">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of currenciesStates; index as i">
+            <ng-container *ngIf="c.isEditing">
+                 <td>
+                  <input class="form-control" type="text" formControlName="Code">
+                </td>
+                <td>
+                  <input class="form-control" type="text" formControlName="Description">
+                </td>
+                <td>
+                    <button type="submit" [disabled]="!currenciesForm.valid"
+                     class="btn btn-success mr-2">
+                        Guardar
+                    </button>
+                    <button class="btn btn-danger"
+                            (click)="cancelar(i)">
+                        Cancelar
+                    </button>
+                </td>
+              </ng-container>
+            <ng-container *ngIf="!c.isEditing">
+              <td>
+                {{c.currency.Code}}
+              </td>
+              <td>
+                {{c.currency.Description}}
+              </td>
+              <td>
+                  <button class="btn btn-primary"
+                          (click)="editarCurrency(i)"
+                          [disabled]="estaEditando">
+                      Editar
+                  </button>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+    </table>
+  </form>
+</div> -->

@@ -1,0 +1,19 @@
+<app-loading-spinner *ngIf="isLoading" class="mt-5"></app-loading-spinner>
+<div *ngIf="!isLoading">
+    <app-animated-text [text]="'Categorias'"></app-animated-text>
+</div>
+<div class="container-fluid" *ngIf="!isLoading">
+    <div class="row">
+        <div class="card-group animated zoomIn">
+            <div *ngFor="let c of parentsWithChilds">
+                <app-card
+                    [isSubCategory]="false"
+                    [img]="c.parentCategory.Logo"
+                    [title]="c.parentCategory.Name"
+                    [subCategories]="c.subcategorias"
+                    >                    
+                </app-card>
+            </div>
+        </div>    
+    </div>    
+</div>

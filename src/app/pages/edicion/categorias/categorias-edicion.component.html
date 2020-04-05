@@ -1,0 +1,58 @@
+<app-animated-text *ngIf="!isLoading" [text]="'Categorias'"></app-animated-text>
+
+<app-loading-spinner *ngIf="isLoading" class="mt-5"></app-loading-spinner>
+<div class="pl-5 pr-5 mt-2" *ngIf="!isLoading">
+
+    <div class="form-row">
+        <div class="col-md-8 form-group">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    
+                    <div class="btn-group" dropdown>
+                        <button id="button-animated" dropdownToggle type="button" class="btn btn-primary"
+                                aria-controls="dropdown-animated" (click)="clearFilter()">
+                                <i class="fas fa-filter"></i>
+                                <span class="caret"></span>
+                        </button>
+                    </div> 
+                </div>
+                <input
+                    id="filter"
+                    class="form-control"
+                    type="text"
+                    [formControl]="filterquery"
+                    placeholder="Filtrar por Nombre"
+                    (keyup)="updateFilter($event)"
+                />
+              </div>
+        </div>
+        <div class="col-md-3">
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">Mostrar</span>
+        </div>
+        <input type="number" [(ngModel)]="limit" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+        </div>
+    </div>
+    </div>
+    
+    <ngx-datatable class="bootstrap"
+      #table
+      [rows]="rows"
+      [columns]="columns"
+      [columnMode]="ColumnMode.force"
+      [headerHeight]="50"
+      [footerHeight]="50"
+      rowHeight="auto"
+      [limit]="limit"
+      [selected]="selected"
+      [selectionType]="SelectionType.single"
+      (select)="editarCategoria($event)"
+      >
+    </ngx-datatable>
+    <button class="btn btn-primary mt-2 mb-2" style="float: right;"
+            (click)="nuevaCategoria()">
+        <i class="fas fa-plus"></i>
+            Registrar nueva categoría
+    </button>
+</div>

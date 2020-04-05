@@ -1,0 +1,27 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav navbar-center">
+        <li class="nav-item">
+          <a class="nav-link" routerLinkActive="active" (click)="navigateTo('productos')">Productos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"  routerLinkActive="active" (click)="navigateTo('categorias')">Categorias</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"  routerLinkActive="active" (click)="navigateTo('empresas')">Empresas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"  routerLinkActive="active" (click)="navigateTo('monedas')">Monedas</a>
+        </li>
+      </ul>
+      <i id="toggler" class="nav-link toggle-edition"
+       [class.far]="!esEdicion"
+       [class.fa-edit]="!esEdicion"
+       [class.fas]="esEdicion"
+       [class.fa-book-open]="esEdicion"
+       (click)="toggleAction()"
+       [tooltip]="tooltip"
+       placement="bottom"
+      ></i>
+    </div>
+  </nav>
