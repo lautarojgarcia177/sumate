@@ -16,7 +16,7 @@
     float: left;
     font-weight: 700;
     font-size: 2em;
-    color: rgb(138, 24, 24);
+    color: #007bff;
     opacity: 1;
     transition: all 0.5s ease-in-out;
     max-width: 2em;

@@ -10,10 +10,16 @@ export class SubcardComponent implements OnInit {
   @Input() img: string;
   @Input() title: string;
   @Input() text: string;
+  _img: string;
 
   constructor() { }
 
   ngOnInit(): void {
+    if(!this.img ) {
+      this._img = 'assets/img/no-img-placeholder.png';
+    } else {
+      this._img = this.img;
+    }
   }
 
 }

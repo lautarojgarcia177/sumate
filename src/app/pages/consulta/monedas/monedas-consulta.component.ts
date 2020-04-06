@@ -82,4 +82,8 @@ export class MonedasConsultaComponent implements OnInit {
     this.rows = [...this.rows];
     window.location.reload();
   }
+
+  columnClass() {
+    return 'datatable-column'
+  }
 }

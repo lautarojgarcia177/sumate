@@ -2,6 +2,7 @@
     position: relative;
     left: 50%;
     transform: translatex(-50%);
+
 }
 
 .toggle-edition {
@@ -32,7 +33,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
   }
@@ -73,14 +74,22 @@
   } 
 
   #toggler {
-    color: #2196F3;
+    color: white;
   }
 
   #toggler:hover {
-    color: #ccc;
+    color: rgb(184, 221, 251);
     cursor: pointer;
   }
 
   .nav-item {
     cursor: pointer;
   }
+
+.nav-font {
+  color: white !important;
+}
+
+.nav-font:hover {
+  color: rgb(184, 221, 251) !important;
+}

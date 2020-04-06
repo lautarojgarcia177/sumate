@@ -46,7 +46,6 @@ export class EmpresasConsultaComponent implements OnInit {
   obtenerLaData(): void {
     this.empresasService.getAll().subscribe(res => {
       this.allCompanies = res;
-      console.log(res);
       this.transformarEmpresas(res);
       this.isLoading = false;
     });
@@ -55,28 +54,43 @@ export class EmpresasConsultaComponent implements OnInit {
    transformarEmpresas(res): void {
     let aux: Company[] = res;
     this.rows = aux.map(curr => {
-      console.log(this.formatearWebsite(curr.Website));
-      return {
-        Nombre: curr.Name,
-        Descripcion: curr.Description,
-        Website: this.formatearWebsite(curr.Website),
-        Logo: curr.Logo,
-        Email: this.formatearEmail(curr.Email),
-        Ciudad: curr.City,
-        Direccion: curr.Address,
-        Telefono: curr.Phone,
-        Fundacion: curr.FoundationDate
-      }
+        return {
+          Nombre: curr.Name,
+          Descripcion: curr.Description,
+          Website: this.formatearWebsite(curr.Website),
+          Logo: curr.Logo,
+          Email: this.formatearEmail(curr.Email),
+          Ciudad: curr.City,
+          Direccion: this.formatearDireccion(curr.Address),
+          Telefono: curr.Phone,
+          Fundacion: this.formatearFundacion(curr.FoundationDate)
+        }
     });
     this.temp = this.rows;
   } 
 
+  formatearDireccion(direccion: string): string {
+    if(direccion) {
+      const url = 'https://goo.gl/maps/VEgrv5MgNL9RUxJL6';
+      return `<a href="${url}" target="_blank" >${direccion}</a>`;
+    } else {
+      return '';
+    }
+  }
+
   formatearWebsite(website: string): string {
-    if (website) {  
-      const inicio = ' <a href="https://';
-      const mid = '" target="_blank" >';
-      const fin = '</a>';
-      return inicio + website + mid + website + fin ;
+    if (website) { 
+      if (website.startsWith('https://')) {
+        const inicio = ' <a href="';
+        const mid = '" target="_blank" >';
+        const fin = '</a>';
+        return inicio + website + mid + website + fin ;
+      } else {
+        const inicio = ' <a href="https://';
+        const mid = '" target="_blank" >';
+        const fin = '</a>';
+        return inicio + website + mid + website + fin ;
+      }
     } else {
       return '';
     }
@@ -91,7 +105,19 @@ export class EmpresasConsultaComponent implements OnInit {
     } else {
       return '';
     }
-}
+  }
+
+  formatearFundacion(fundacion: any): string {
+    if(fundacion) {
+      const dia = fundacion.substr(8,2);
+      const mes = fundacion.substr(5,2);
+      const year = fundacion.substr(0,4);
+      let fecha = `${dia}/${mes}/${year}`;
+      return fecha;
+    } else {
+      return '';
+    }
+  }
 
   updateFilter(event?) {
     let val;
