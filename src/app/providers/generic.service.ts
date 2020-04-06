@@ -102,4 +102,5 @@ export abstract class GenericService<T> {
       catchError(this.errorHandlerService.handleError)
     );
  };
+
 }

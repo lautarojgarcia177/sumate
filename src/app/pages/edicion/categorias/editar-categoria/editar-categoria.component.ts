@@ -19,7 +19,6 @@ export class EditarCategoriaComponent implements OnInit {
   parentCategories: any[] = [];
   products: any[] = [];
   categoryProducts: Array<any> = [];
-  //allcategories: Category[];
   selectedCategory;
 
   error: Error;

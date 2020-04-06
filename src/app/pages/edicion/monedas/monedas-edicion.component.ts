@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CurrenciesService } from '../../../providers/currencies.service';
 import { Currency } from '../../../models/currency.model';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
-
-interface CurrencyState {
-  currency: Currency,
-  isEditing: boolean;
-}
+import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
+import {DatatableComponent} from '@swimlane/ngx-datatable';
+import { EditarMonedaComponent } from './editar-moneda/editar-moneda.component';
 
 @Component({
   selector: 'app-monedas',
@@ -17,64 +17,114 @@ interface CurrencyState {
 export class MonedasEdicionComponent implements OnInit {
 
   isLoading = true;
-  allCurrencies: Currency[] = [];
-  currenciesStates: CurrencyState[] = [];
 
-  estaEditando = false;
+  limit = 10;
+  rows = [];
+  temp = [];
+  selected = [];
+  filterquery = new FormControl('');
+  columns = [
+    {prop: 'Codigo'},
+    {prop: 'Descripcion'}
+  ];
+  ColumnMode = ColumnMode;
+  SelectionType = SelectionType;
 
-  currenciesForm = this.fb.group({
-    Code: ['', [Validators.required]],
-    Description: ['', [Validators.required]]
-  });
+  @ViewChild(DatatableComponent, { static: false }) table: DatatableComponent;
+
+  modalRef: BsModalRef;
+  subscriptions: Subscription[] = [];
 
   constructor(private currenciesService: CurrenciesService,
-              private fb: FormBuilder) { }
+              private bsModalService: BsModalService) { }
 
   ngOnInit(): void {
-    this.isLoading = true;
+    this.obtenerLaData();
+  }
+
+  obtenerLaData(): void {
+
     this.currenciesService.getAll().subscribe(res => {
-      //this.setCurrencies(res);
+      this.transformarMonedas(res);
       this.isLoading = false;
-    });
+    })
   }
 
-  setCurrencies(currs: Currency[]): void {
-    this.allCurrencies = currs;
-    this.allCurrencies.forEach(curr => {
-      const currencyState: CurrencyState = {
-        currency: curr,
-        isEditing: false
+  transformarMonedas(res): void {
+    let aux: Currency[] = res;
+    this.rows = aux.map(curr => {
+      return {
+        Codigo: curr.Code,
+        Descripcion: curr.Description
       }
-      this.currenciesStates.push(currencyState);
     });
+    this.temp = this.rows;
   }
 
-  editarCurrency(index) {
-    this.currenciesStates[index].isEditing = true;
-    this.estaEditando = true;
-    this.currenciesForm.reset({
-      Code: this.currenciesStates[index].currency.Code,
-      Description: this.currenciesStates[index].currency.Description
+  updateFilter(event?) {
+    let val;
+    if(event) {
+       val = event.target.value.toLowerCase();
+    } else {
+      val = '';
+    }
+
+    // filter our data
+    const temp = this.temp.filter(function(d) {
+      return d.Descripcion.toLowerCase().indexOf(val) !== -1 || !val;
     });
+
+    // update the rows
+    this.rows = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.table.offset = 0;
   }
 
-  guardar(index) {
-    this.currenciesStates[index].isEditing = false;
-    this.estaEditando = false;
+  clearFilter() {
+    this.filterquery.reset();
+    this.updateFilter()
   }
 
-  cancelar(index) {
-    this.currenciesStates[index].isEditing = false;
-    this.estaEditando = false;
+  refreshTable() {
+    this.rows = [...this.rows];
+    window.location.reload();
   }
 
-  onSubmit() {
-    this.estaEditando = false;
-    this.currenciesStates.find(currs => currs.isEditing === true).currency.Code = this.currenciesForm.value.Code;
-    this.currenciesStates.find(currs => currs.isEditing === true).currency.Description = this.currenciesForm.value.Description;
-    this.currenciesStates.find(currs => currs.isEditing === true).isEditing = false;
-    // hacer el http put
+  nuevaMoneda() {
+    const config = {
+      keyboard: true,
+      initialState: {
+        title: 'Nueva Moneda'
+      }
+    }
+    this.modalRef = this.bsModalService.show(EditarMonedaComponent, config);
+    this.subscriptions.push(
+      this.bsModalService.onHide.subscribe((reason: string) => {
+        if (reason !== 'backdrop-click') {
+          this.refreshTable();
+        }
+      })
+    );
   }
 
+  onSelect({selected}) {
+    console.log('Select Event', selected, this.selected);
+  }
 
+  editarMoneda(event) {
+    const config = {
+      keyboard: true,
+      initialState: {
+        title: 'Editar Moneda',
+        selectedCurrency: event.selected[0]
+      }
+    }
+    this.modalRef = this.bsModalService.show(EditarMonedaComponent, config);
+
+    this.subscriptions.push(
+      this.bsModalService.onHide.subscribe(() => {
+        this.refreshTable()
+      })
+    );
+  }
 }

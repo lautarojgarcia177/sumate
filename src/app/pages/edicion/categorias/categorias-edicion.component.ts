@@ -165,7 +165,6 @@ export class CategoriasEdicionComponent implements OnInit{
       initialState: {
         title: 'Nueva Categoria',
         categories: this.filtrarCategoriasPadres(),
-        //products: 
       }
     };
     this.modalRef = this.bsmodalservice.show(EditarCategoriaComponent, config);
