@@ -153,6 +153,10 @@ export class CategoriasEdicionComponent implements OnInit{
     console.log('Detail Toggled', event);
   }
 
+  hoverRed(row) {
+    return 'hoverRow';
+  }
+
   refreshTable() {
     this.obtenerLaData();
     this.rows = [...this.rows];

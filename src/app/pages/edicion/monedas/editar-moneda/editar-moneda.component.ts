@@ -4,7 +4,6 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import  Swal from 'sweetalert2';
 import { Component, OnInit } from '@angular/core';
-import { forbiddenWordsValidation } from 'src/app/shared/custom-validators/forbidden-words-validation';
 
 @Component({
   selector: 'app-editar-moneda',
@@ -22,16 +21,18 @@ export class EditarMonedaComponent implements OnInit {
   isLoading = true;
   Swal = Swal;
 
-  forma = this.fb.group({
-            Code: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(6)]],
-            Description: ['', [Validators.required, Validators.max(60)], , {'updateOn': blur} ]
-          });
+  forma: FormGroup;
 
   constructor(private fb: FormBuilder,
               public bsModalRef: BsModalRef,
-              private currenciesService: CurrenciesService) { }
+              private currenciesService: CurrenciesService) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {  
+    this.forma = this.fb.group({
+      Code: ['',
+      [Validators.required, Validators.minLength(3), Validators.maxLength(6)]],
+      Description: ['', [Validators.required, Validators.maxLength(60)]]
+    });
     this.inicializarFormulario();
     this.isLoading = false;
   }
@@ -45,39 +46,48 @@ export class EditarMonedaComponent implements OnInit {
     }
   }
 
+  esCodigoYaTomado(): void {
+    this.currenciesService.isNameTaken(this.forma.get('Code').value).subscribe(isTaken => {
+      if (isTaken) {
+        this.forma.get('Code').setErrors({notUnique: true});
+      }
+    });
+  }
+
   onSubmit() {
-    this.isLoading = true;
-    const reqCurrency: Currency = {
-      Code: this.forma.get('Code').value,
-      Description: this.forma.get('Description').value
-    }
-    if (this.title === 'Nueva Moneda') {
-      this.currenciesService.add(reqCurrency).subscribe(() => {
-        this.isLoading = false;
-        Swal.fire({
-          icon: 'success',
-          title: 'Se ha registrado la nueva categoría',
-          showConfirmButton: false,
-          timer: 1500
-        })
-        this.bsModalRef.hide();
-      },
-      error => this.error = error);
-    } else {
-      this.currenciesService.getCurrencyIdByCode(this.selectedCurrency.Code).subscribe(res => {
-        this.currenciesService.edit(res, reqCurrency).subscribe( o => {
+      this.isLoading = true;
+      const reqCurrency: Currency = {
+        Code: this.forma.get('Code').value,
+        Description: this.forma.get('Description').value
+      }
+      if (this.title === 'Nueva Moneda') {
+        this.currenciesService.add(reqCurrency).subscribe(() => {
           this.isLoading = false;
           Swal.fire({
             icon: 'success',
-            title: 'Se ha editado la moneda',
+            title: 'Se ha registrado la nueva categoría',
             showConfirmButton: false,
             timer: 1500
-          });
+          })
           this.bsModalRef.hide();
         },
         error => this.error = error);
-      }); 
-    }
+      } else {
+        this.currenciesService.getCurrencyIdByCode(this.selectedCurrency.Code).subscribe(res => {
+          this.currenciesService.edit(res, reqCurrency).subscribe( o => {
+            this.isLoading = false;
+            Swal.fire({
+              icon: 'success',
+              title: 'Se ha editado la moneda',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.bsModalRef.hide();
+          },
+          error => this.error = error);
+        }); 
+      }
+    
   }
 
   eliminar() {

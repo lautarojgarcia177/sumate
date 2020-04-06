@@ -127,4 +127,8 @@ export class MonedasEdicionComponent implements OnInit {
       })
     );
   }
+
+  hoverRed(row) {
+    return 'hoverRow';
+  }
 }

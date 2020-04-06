@@ -6,6 +6,7 @@ import { Category } from 'src/app/models/categoria.model';
 import Swal from 'sweetalert2';
 import { Product } from 'src/app/models/product.model';
 import { ProductosService } from 'src/app/providers/productos.service';
+import { imgValidation } from 'src/app/shared/custom-validators/img-validation';
 
 @Component({
   selector: 'app-editar-categoria',
@@ -31,7 +32,7 @@ export class EditarCategoriaComponent implements OnInit {
   forma = this.fb.group({
     Name: ['', [Validators.required]],
     Parent: [''],
-    Logo: [''],
+    Logo: ['', [imgValidation]],
     Products: this.fb.array([])
   });
 
@@ -118,6 +119,14 @@ export class EditarCategoriaComponent implements OnInit {
         });
       }
     });
+  }
+
+  public esNombreYaTomado(): void {
+      this.categoriesService.isNameTaken(this.forma.get('Name').value).subscribe(isTaken => {
+        if (isTaken) {
+          this.forma.get('Name').setErrors({notUnique: true});
+        }
+      });
   }
 
   private generarArrayDeIdsProductos(arr: Product[]): number[] {

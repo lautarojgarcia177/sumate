@@ -8,6 +8,11 @@
   max-width: 50%;
 }
 
+.hoverRow:hover {
+  background-color: rgb(210, 210, 238) !important;
+  cursor: pointer;
+}
+
 @charset "UTF-8";
 
 /*!
