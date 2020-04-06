@@ -2,8 +2,10 @@ import { Company } from './../../../models/company.model';
 import { EmpresasService } from './../../../providers/empresas.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ColumnMode } from '@swimlane/ngx-datatable';
+import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import {DatatableComponent} from '@swimlane/ngx-datatable';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { EmpresaDetalleComponent } from './empresa-detalle/empresa-detalle.component';
 
 @Component({
   selector: 'app-empresas-consulta',
@@ -21,9 +23,10 @@ export class EmpresasConsultaComponent implements OnInit {
   rows = [];
   temp = [];
   filterquery = new FormControl('');
+  selected = [];
   columns = [
     {prop: 'Nombre'},
-    {prop: 'Descripcion'},
+    //{prop: 'Descripcion'},
     {prop: 'Website'},
     {prop: 'Logo'},
     {prop: 'Email'},
@@ -33,11 +36,15 @@ export class EmpresasConsultaComponent implements OnInit {
     {prop: 'Fundacion'}
   ];
   ColumnMode = ColumnMode;
+  SelectionType = SelectionType;
   allCompanies;
 
   @ViewChild(DatatableComponent, { static: false }) table: DatatableComponent;
 
-  constructor(private empresasService: EmpresasService) { }
+  modalRef: BsModalRef;
+
+  constructor(private empresasService: EmpresasService,
+              private bsModalService: BsModalService) { }
 
   ngOnInit(): void {
     this.obtenerLaData();
@@ -56,12 +63,12 @@ export class EmpresasConsultaComponent implements OnInit {
     this.rows = aux.map(curr => {
         return {
           Nombre: curr.Name,
-          Descripcion: curr.Description,
+          //Descripcion: curr.Description,
           Website: this.formatearWebsite(curr.Website),
           Logo: curr.Logo,
           Email: this.formatearEmail(curr.Email),
           Ciudad: curr.City,
-          Direccion: this.formatearDireccion(curr.Address),
+          Direccion: curr.Address,
           Telefono: curr.Phone,
           Fundacion: this.formatearFundacion(curr.FoundationDate)
         }
@@ -147,4 +154,17 @@ export class EmpresasConsultaComponent implements OnInit {
     this.rows = [...this.rows];
     window.location.reload();
   }
+
+  verDetalleEmpresa(event) {
+    console.log(event.selected[0]);
+    const config = {
+      keyboard: true,
+      initialState: {
+        selectedCompany: event.selected[0]
+      }
+    }
+    this.modalRef = this.bsModalService.show(EmpresaDetalleComponent, config);
+
+  }
+  
 }

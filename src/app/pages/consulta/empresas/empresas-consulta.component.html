@@ -24,6 +24,7 @@
                   [formControl]="filterquery"
                   placeholder="Filtrar por Nombre"
                   (keyup)="updateFilter($event)"
+                  
               />
             </div>
       </div>
@@ -46,6 +47,9 @@
     [footerHeight]="50"
     rowHeight="auto"
     [limit]="limit"
+    [selected]="selected"
+    [selectionType]="SelectionType.single"
+    (select)="verDetalleEmpresa($event)"
     >
   </ngx-datatable>
 </div>

@@ -34,6 +34,7 @@ import { AnimatedTextComponent } from './components/animated-text/animated-text.
 import { EditarCategoriaComponent } from 'src/app/pages/edicion/categorias/editar-categoria/editar-categoria.component';
 import { AnimatedCheckboxComponent } from './components/animated-checkbox/animated-checkbox.component';
 import { EditarMonedaComponent } from './pages/edicion/monedas/editar-moneda/editar-moneda.component';
+import {EmpresaDetalleComponent} from 'src/app/pages/consulta/empresas/empresa-detalle/empresa-detalle.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { EditarMonedaComponent } from './pages/edicion/monedas/editar-moneda/edi
     AnimatedTextComponent,
     EditarCategoriaComponent,
     AnimatedCheckboxComponent,
-    EditarMonedaComponent
+    EditarMonedaComponent,
+    EmpresaDetalleComponent
   ],
   imports: [
     BrowserModule,

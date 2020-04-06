@@ -29,4 +29,15 @@ export class EmpresasService extends GenericService<Company> {
     });
     return obs;
   }
+
+  public getCompanyIdByName(name: string): Observable<any> {
+    let obs = new Observable(suscriber => {
+      this.getAll().subscribe((res: Array<any>) => {
+        const id = res.find(c => c.Name === name).Id;
+        suscriber.next(id);
+        suscriber.complete();
+      })
+    });
+    return obs;
+  }
 }

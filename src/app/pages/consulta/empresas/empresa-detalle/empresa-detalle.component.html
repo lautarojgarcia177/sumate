@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{selectedCompany.Nombre}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+        <div class="form-group">
+            <label for="descriptionFormControlInput">Descripción</label>
+            <input type="text" class="form-control" id="descriptionFormControlInput" [value]="selectedCompany.Descripcion">
+        </div>
+        <div class="form-group" *ngIf="selectedCompany.googleMapsIframe">
+            <label for="Map">Ubicación</label>
+            <div [innerHTML]="safeHtml">
+            </div>
+        </div>
+  </div>
