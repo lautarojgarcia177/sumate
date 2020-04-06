@@ -5,8 +5,12 @@ import { Injectable } from '@angular/core';
 import { Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+interface IIsNameTaken {
+  isNameTaken: (name: string) => Observable<boolean>
+}
+
 @Injectable()
-export abstract class GenericService<T> {
+export abstract class GenericService<T> implements IIsNameTaken{
 
   protected error: Error;
   protected _url: string
@@ -18,6 +22,8 @@ export abstract class GenericService<T> {
               @Inject(String) protected url: string) {
                   this._url = url;
                }
+
+  abstract isNameTaken(name: string): Observable<boolean>;
 
   public getAll(force?: any): Observable<Array<T>> {
     let obs = new Observable<Array<T>>((suscriber) => {

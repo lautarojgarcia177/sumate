@@ -1,4 +1,4 @@
-import { Observable, observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../models/product.model';
@@ -42,6 +42,21 @@ export class ProductosService extends GenericService<Product> {
         suscriber.complete();
       });
     })
+    return obs;
+  }
+
+  public isNameTaken(code: string): Observable<boolean> {
+    const obs = new Observable<boolean>(suscriber => {
+      this.getAll().subscribe(res => {
+        const newArr = res.map(c => c.Name);
+        if (newArr.includes(code)) {
+          suscriber.next(true);
+        } else {
+          suscriber.next(false);
+        }
+        suscriber.complete();
+      });
+    });
     return obs;
   }
 }

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Currency } from '../models/currency.model';
 import { GenericService } from './generic.service';
 import { Injectable } from '@angular/core';
+import { nextSortDir } from '@swimlane/ngx-datatable';
 
 @Injectable()
 export class CurrenciesService extends GenericService<Currency> {
@@ -20,6 +21,21 @@ export class CurrenciesService extends GenericService<Currency> {
         suscriber.next(id);
         suscriber.complete();
       })
+    });
+    return obs;
+  }
+
+  public isNameTaken(code: string): Observable<boolean> {
+    const obs = new Observable<boolean>(suscriber => {
+      this.getAll().subscribe(res => {
+        const newArr = res.map(c => c.Code);
+        if (newArr.includes(code)) {
+          suscriber.next(true);
+        } else {
+          suscriber.next(false);
+        }
+        suscriber.complete();
+      });
     });
     return obs;
   }

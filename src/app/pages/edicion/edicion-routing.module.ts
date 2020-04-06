@@ -8,7 +8,6 @@ import { ProductosEdicionComponent } from './productos/productos-edicion.compone
 import { EditarCategoriaComponent } from './categorias/editar-categoria/editar-categoria.component';
 
 const routes: Routes = [
-  { path: 'categorias/editar/:id', component: EditarCategoriaComponent},
   { path: 'categorias', component: CategoriasEdicionComponent },
   { path: 'empresas', component: EmpresasEdicionComponent },
   { path: 'monedas', component: MonedasEdicionComponent },
