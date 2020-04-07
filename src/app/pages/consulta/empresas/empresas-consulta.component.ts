@@ -182,6 +182,10 @@ export class EmpresasConsultaComponent implements OnInit {
 
   }
 
+  hoverRed(row) {
+    return 'hoverRow';
+  }
+
   onLimitChange(): void {
     if(this.limitControl.value > this.limit) {
       this.limitControl.setValue(this.limit);

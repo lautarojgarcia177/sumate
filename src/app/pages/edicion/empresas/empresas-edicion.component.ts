@@ -226,5 +226,9 @@ editarEmpresa(event) {
       })
     );
 }
+
+  hoverRed(row) {
+    return 'hoverRow';
+  }
   
 }

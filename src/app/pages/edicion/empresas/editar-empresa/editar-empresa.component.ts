@@ -6,6 +6,8 @@ import  Swal from 'sweetalert2';
 import { Company } from 'src/app/models/company.model';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { imgValidation } from 'src/app/shared/custom-validators/img-validation';
+import {forbiddenNameValidator} from 'src/app/shared/custom-validators/forbidden-name';
+import { httpsValidation } from 'src/app/shared/custom-validators/url-validation';
 
 @Component({
   selector: 'app-editar-empresa',
@@ -16,7 +18,7 @@ import { imgValidation } from 'src/app/shared/custom-validators/img-validation';
 export class EditarEmpresaComponent implements OnInit {
   
   selectedCompany;
-  datepickerInitialValue;
+  datepickerInitialValue: Date;
 
   error: Error;
 
@@ -35,9 +37,9 @@ export class EditarEmpresaComponent implements OnInit {
     City: [''],
     Website: [''],
     Email: ['', [Validators.email]],
-    Description: ['', [Validators.required, Validators.maxLength(160)]],
+    Description: ['', [Validators.maxLength(160)]],
     Phone: [''],
-    Logo: ['', imgValidation]
+    Logo: ['', [imgValidation]]
   });
 
   maxDate: Date;
@@ -57,11 +59,21 @@ export class EditarEmpresaComponent implements OnInit {
     this.obtenerLaData(); 
    }
 
+   showForma() {
+     console.log(Object.keys(this.forma));
+     console.log(this.forma);
+   }
+
   obtenerLaData() {
     if(this.selectedCompany) {
       this.companiesService.getAll().subscribe(companies => {
-        this.selectedCompany.Descripcion = companies.filter(c => c.Name === this.selectedCompany.Nombre)[0].Description;
-        this.datepickerInitialValue = this.selectedCompany.FoundationDate;
+        this.selectedCompany = companies.filter(c => c.Name === this.selectedCompany.Nombre)[0];
+        if (this.selectedCompany.Logo === null ) {
+          this.selectedCompany.Logo = this.nullimg;
+        }
+        if (this.selectedCompany.FoundationDate) {
+          this.datepickerInitialValue = this.formatearFecha();
+        }
         this.inicializarFormulario();
         this.isLoading = false;
       });
@@ -70,22 +82,34 @@ export class EditarEmpresaComponent implements OnInit {
     }      
   }
 
+  formatearFecha(): Date {
+      let date = new Date();
+      const dia = parseInt(this.selectedCompany.FoundationDate.substr(8,2));
+      const mes = parseInt(this.selectedCompany.FoundationDate.substr(5,2));
+      const anio = parseInt(this.selectedCompany.FoundationDate.substr(0,4));
+      date.setDate(dia);
+      date.setMonth(mes);
+      date.setFullYear(anio);
+      return date;
+  }
+
   inicializarFormulario(): void {
     this.maxDate = new Date();
     this.maxDate.setDate(this.maxDate.getDate());
     if (this.title === 'Editar Empresa') {
       this.forma.reset({
-        Name: this.selectedCompany.Nombre,
-        FoundationDate: this.selectedCompany.Fundacion,
-        Address: this.selectedCompany.Direccion,
-        City: this.selectedCompany.Ciudad,
+        Name: this.selectedCompany.Name,
+        FoundationDate: this.datepickerInitialValue,
+        Address: this.selectedCompany.Address,
+        City: this.selectedCompany.City,
         Website: this.selectedCompany.Website,
         Email: this.selectedCompany.Email,
-        Description: this.selectedCompany.Descripcion,
-        Phone: this.selectedCompany.Telefono,
+        Description: this.selectedCompany.Description,
+        Phone: this.selectedCompany.Phone,
         Logo: this.selectedCompany.Logo
       });
     }
+    console.log(this.forma.controls);
   }
 
   esCodigoYaTomado(): void {
