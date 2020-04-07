@@ -32,7 +32,7 @@
       <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon3">Mostrar</span>
       </div>
-      <input type="number" [(ngModel)]="limit" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+      <input type="number" [formControl]="limitControl" class="form-control" id="basic-url" aria-describedby="basic-addon3" (change)="onLimitChange()">
       </div>
   </div>
   </div>

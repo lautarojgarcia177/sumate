@@ -10,7 +10,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-
+import { QuillModule } from 'ngx-quill';
+import { BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 
 import { CardComponent } from './components/ui/card/card.component';
 import { SubcardComponent } from './components/ui/card/subcard/subcard.component';
@@ -35,6 +36,7 @@ import { EditarCategoriaComponent } from 'src/app/pages/edicion/categorias/edita
 import { AnimatedCheckboxComponent } from './components/animated-checkbox/animated-checkbox.component';
 import { EditarMonedaComponent } from './pages/edicion/monedas/editar-moneda/editar-moneda.component';
 import {EmpresaDetalleComponent} from 'src/app/pages/consulta/empresas/empresa-detalle/empresa-detalle.component';
+import { EditarEmpresaComponent } from 'src/app/pages/edicion/empresas/editar-empresa/editar-empresa.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,8 @@ import {EmpresaDetalleComponent} from 'src/app/pages/consulta/empresas/empresa-d
     EditarCategoriaComponent,
     AnimatedCheckboxComponent,
     EditarMonedaComponent,
-    EmpresaDetalleComponent
+    EmpresaDetalleComponent,
+    EditarEmpresaComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +73,11 @@ import {EmpresaDetalleComponent} from 'src/app/pages/consulta/empresas/empresa-d
     BsDropdownModule.forRoot(),
     FormsModule,
     ModalModule.forRoot(),
-    PopoverModule.forRoot()
+    PopoverModule.forRoot(),
+    QuillModule.forRoot({
+      theme: 'snow'
+    }),
+    BsDatepickerModule.forRoot(),
   ],
   providers: [
     httpInterceptorProviders

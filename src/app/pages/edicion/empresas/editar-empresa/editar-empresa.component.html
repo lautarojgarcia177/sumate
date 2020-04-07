@@ -1,0 +1,93 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">{{title}}</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+  <form [formGroup]="forma" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+      <div class="form-group">
+        <label for="nombreFormControlInput">Nombre</label>
+        <input type="text" class="form-control" id="nombreFormControlInput" formControlName="Name" (blur)="esCodigoYaTomado()">
+        <div *ngIf="forma.get('Name').invalid && (forma.get('Name').dirty || forma.get('Name').touched)" class="alert alert-danger">
+          <div *ngIf="forma.get('Name').errors.required">
+            El nombre es requerido
+          </div>
+          <div *ngIf="forma.get('Name').errors.minlength">
+            El nombre debe tener un mínimo de 3 letras
+          </div>
+          <div *ngIf="forma.get('Name').errors.maxlength">
+            El nombre debe tener un máximo de 25 letras
+          </div>
+          <div *ngIf="forma.get('Name').errors.notUnique">
+            El nombre ingresado ya existe
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="nombreFormControlInput">Fecha de fundación</label>
+        <input type="text"
+          formControlName="FoundationDate"
+          #dp="bsDatepicker"
+          class="form-control"
+          bsDatepicker
+          [bsValue]="datepickerInitialValue"
+          [bsConfig]="{ isAnimated: true,
+                        adaptivePosition: true,
+                        dateInputFormat: 'DD/MM/YYYY',
+                        containerClass: 'theme-blue' }"
+          [maxDate]="maxDate">
+      </div>
+      <div class="form-group">
+        <label for="addressfcui">Direccion</label>
+        <input type="text" class="form-control" id="addressfcui" formControlName="Address">
+      </div>
+      <div class="form-group">
+        <label for="ciudadfci">Ciudad</label>
+        <input type="text" class="form-control" id="ciudadfci" formControlName="City">
+      </div>
+      <div class="form-group">
+        <label for="websitefco">Sitio Web</label>
+        <input type="text" class="form-control" id="websitefco" formControlName="Website">
+      </div>
+      <div class="form-group">
+        <label for="emailfc">Email</label>
+        <input type="text" class="form-control" id="emailfc" formControlName="Address">
+      </div>
+      <div class="form-group">
+          <label for="descriptionFormControlInput">Descripción</label>
+          <!-- <input type="text" class="form-control" id="descriptionFormControlInput" formControlName="Description"> -->
+          <quill-editor id="descriptionFormControlInput"
+           formControlName="Description"
+           ></quill-editor>
+      </div>
+      <div class="form-group">
+        <label for="phonefc">Telefono</label>
+        <input type="text" class="form-control" id="phonefc" formControlName="Phone">
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlTextarea1">Logo url</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="Logo">
+        <div *ngIf="forma.get('Logo').invalid && (forma.get('Logo').dirty || forma.get('Logo').touched)" class="alert alert-danger">
+          <div *ngIf="forma.get('Logo').errors.validImgUrl">
+            El formato de la imagen no es válido, debe ser png o jpg
+          </div>
+        </div>
+        <div class="container mt-3">
+            <img *ngIf="forma.value.Logo" alt="..." class="rounded-lg" style="max-width: 100%"
+            [src]="forma.value.Logo">
+            <img *ngIf="!forma.value.Logo" alt="..." class="rounded-lg" style="max-width: 100%"
+            [src]="nullimg">
+        </div>
+    </div>
+        <div class="col mb-3">
+          <button *ngIf="selectedCompany" 
+            class="btn btn-danger mb-3"
+            style="float: left;" type="button"
+            (click)="eliminar()">Eliminar</button>
+          <button class="btn btn-warning ml-2 mb-3" style="float: right;" type="button" (click)="bsModalRef.hide()">Cancelar</button>
+          <button class="btn btn-success mb-3 mr-2" style="float: right;" type="submit" [disabled]="!forma.valid">Guardar</button>
+        </div>
+  </form>
+</div>

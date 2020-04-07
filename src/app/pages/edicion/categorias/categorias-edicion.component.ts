@@ -7,7 +7,7 @@ import {DatatableComponent} from '@swimlane/ngx-datatable';
 import {ColumnMode, SelectionType} from '@swimlane/ngx-datatable';
 import { CategoriasService } from 'src/app/providers/categorias.service';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { EditarCategoriaComponent } from './editar-categoria/editar-categoria.component';
 import { Product } from 'src/app/models/product.model';
@@ -30,6 +30,8 @@ export class CategoriasEdicionComponent implements OnInit{
   filterquery = new FormControl('');
 
   mitabla = new FormControl('');
+
+  limitControl: FormControl;
 
   rows = [
   ];
@@ -71,6 +73,10 @@ export class CategoriasEdicionComponent implements OnInit{
     .subscribe(([res1, res2]) => {
       //this.allproducts = res2;
       this.transformarCategorias(res1);
+      if (this.limit > res1.length) {
+        this.limit = res1.length;
+      }
+      this.limitControl = new FormControl(this.limit, Validators.max(this.limit));
       this.isLoading = false;
     });
   }
@@ -213,5 +219,14 @@ export class CategoriasEdicionComponent implements OnInit{
     catPadres = this.rows.filter(c => c.Categoria === '');
     return catPadres;
   }
+
+  onLimitChange(): void {
+    if(this.limitControl.value > this.limit) {
+      this.limitControl.setValue(this.limit);
+    }
+    if(this.limitControl.value < 0) {
+      this.limitControl.setValue(0);
+    }
+ }
 
 }

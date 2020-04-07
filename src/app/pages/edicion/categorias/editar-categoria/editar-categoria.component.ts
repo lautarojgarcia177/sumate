@@ -30,7 +30,7 @@ export class EditarCategoriaComponent implements OnInit {
   nullimg: string = '/assets/img/no-img-placeholder.png';
 
   forma = this.fb.group({
-    Name: ['', [Validators.required]],
+    Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
     Parent: [''],
     Logo: ['', [imgValidation]],
     Products: this.fb.array([])

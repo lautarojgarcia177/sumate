@@ -10,6 +10,20 @@
         <div class="form-group">
           <label for="nombreFormControlInput">Nombre</label>
           <input type="text" class="form-control" id="nombreFormControlInput" formControlName="Name" (blur)="esNombreYaTomado()">
+          <div *ngIf="forma.get('Name').invalid && (forma.get('Name').dirty || forma.get('Name').touched)" class="alert alert-danger">
+            <div *ngIf="forma.get('Name').errors.required">
+              El nombre es requerido
+            </div>
+            <div *ngIf="forma.get('Name').errors.minlength">
+              El nombre debe tener un mínimo de 3 letras
+            </div>
+            <div *ngIf="forma.get('Name').errors.maxlength">
+              El nombre debe tener un máximo de 25 letras
+            </div>
+            <div *ngIf="forma.get('Name').errors.notUnique">
+              El nombre ingresado ya existe
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <label for="exampleFormControlSelect1">Es Subcategoria de</label>

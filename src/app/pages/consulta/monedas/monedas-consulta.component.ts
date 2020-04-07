@@ -1,6 +1,6 @@
 import { CurrenciesService } from './../../../providers/currencies.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import {DatatableComponent} from '@swimlane/ngx-datatable';
 import { Currency } from 'src/app/models/currency.model';
@@ -29,6 +29,8 @@ export class MonedasConsultaComponent implements OnInit {
 
   @ViewChild(DatatableComponent, { static: false }) table: DatatableComponent;
 
+  limitControl: FormControl;
+
   constructor(private currenciesService: CurrenciesService) { }
 
   ngOnInit(): void {
@@ -39,9 +41,22 @@ export class MonedasConsultaComponent implements OnInit {
 
     this.currenciesService.getAll().subscribe(res => {
       this.transformarMonedas(res);
+      if (this.limit > res.length) {
+        this.limit = res.length;
+      }
+      this.limitControl = new FormControl(this.limit, Validators.max(this.limit));
       this.isLoading = false;
     })
   }
+
+  onLimitChange(): void {
+    if(this.limitControl.value > this.limit) {
+      this.limitControl.setValue(this.limit);
+    }
+    if(this.limitControl.value < 0) {
+      this.limitControl.setValue(0);
+    }
+ }
 
   transformarMonedas(res): void {
     let aux: Currency[] = res;

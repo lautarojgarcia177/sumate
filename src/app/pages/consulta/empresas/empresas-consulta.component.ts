@@ -1,7 +1,7 @@
 import { Company } from './../../../models/company.model';
 import { EmpresasService } from './../../../providers/empresas.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import {DatatableComponent} from '@swimlane/ngx-datatable';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -39,6 +39,8 @@ export class EmpresasConsultaComponent implements OnInit {
   SelectionType = SelectionType;
   allCompanies;
 
+  limitControl: FormControl;
+
   @ViewChild(DatatableComponent, { static: false }) table: DatatableComponent;
 
   modalRef: BsModalRef;
@@ -53,6 +55,10 @@ export class EmpresasConsultaComponent implements OnInit {
   obtenerLaData(): void {
     this.empresasService.getAll().subscribe(res => {
       this.allCompanies = res;
+      if (this.limit > res.length) {
+        this.limit = res.length;
+      }
+      this.limitControl = new FormControl(this.limit, Validators.max(this.limit));
       this.transformarEmpresas(res);
       this.isLoading = false;
     });
@@ -65,7 +71,7 @@ export class EmpresasConsultaComponent implements OnInit {
           Nombre: curr.Name,
           //Descripcion: curr.Description,
           Website: this.formatearWebsite(curr.Website),
-          Logo: curr.Logo,
+          Logo: this.formatearLogo(curr.Logo),
           Email: this.formatearEmail(curr.Email),
           Ciudad: curr.City,
           Direccion: curr.Address,
@@ -83,6 +89,15 @@ export class EmpresasConsultaComponent implements OnInit {
     } else {
       return '';
     }
+  }
+
+  formatearLogo(logo: string): string {
+    if (logo) {
+      logo = '<img class="category-logo rounded-lg" src="' + logo + '">';
+    } else {
+      logo = '<img class="category-logo rounded-lg" src="/assets/img/no-img-placeholder.png">';
+    }
+    return logo;
   }
 
   formatearWebsite(website: string): string {
@@ -166,5 +181,14 @@ export class EmpresasConsultaComponent implements OnInit {
     this.modalRef = this.bsModalService.show(EmpresaDetalleComponent, config);
 
   }
+
+  onLimitChange(): void {
+    if(this.limitControl.value > this.limit) {
+      this.limitControl.setValue(this.limit);
+    }
+    if(this.limitControl.value < 0) {
+      this.limitControl.setValue(0);
+    }
+ }
   
 }
