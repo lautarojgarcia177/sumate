@@ -47,11 +47,21 @@ export class EditarMonedaComponent implements OnInit {
   }
 
   esCodigoYaTomado(): void {
-    this.currenciesService.isNameTaken(this.forma.get('Code').value).subscribe(isTaken => {
-      if (isTaken) {
-        this.forma.get('Code').setErrors({notUnique: true});
+    if (this.title === 'Nueva Moneda') {
+      this.currenciesService.isNameTaken(this.forma.get('Code').value).subscribe(isTaken => {
+        if (isTaken) {
+          this.forma.get('Code').setErrors({notUnique: true});
+        }
+      });
+    } else {
+      if (this.selectedCurrency.Nombre !== this.forma.get('Code').value) {
+        this.currenciesService.isNameTaken(this.forma.get('Code').value).subscribe(isTaken => {
+          if (isTaken) {
+            this.forma.get('Code').setErrors({notUnique: true});
+          }
+        });
       }
-    });
+    }
   }
 
   onSubmit() {
@@ -73,7 +83,7 @@ export class EditarMonedaComponent implements OnInit {
         },
         error => this.error = error);
       } else {
-        this.currenciesService.getCurrencyIdByCode(this.selectedCurrency.Code).subscribe(res => {
+        this.currenciesService.getCurrencyIdByCode(this.selectedCurrency.Codigo).subscribe(res => {
           this.currenciesService.edit(res, reqCurrency).subscribe( o => {
             this.isLoading = false;
             Swal.fire({

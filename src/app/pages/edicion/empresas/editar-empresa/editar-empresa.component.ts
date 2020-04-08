@@ -37,7 +37,7 @@ export class EditarEmpresaComponent implements OnInit {
     City: [''],
     Website: [''],
     Email: ['', [Validators.email]],
-    Description: ['', [Validators.maxLength(160)]],
+    Description: ['', [Validators.maxLength(200)]],
     Phone: [''],
     Logo: ['', [imgValidation]]
   });
@@ -57,11 +57,6 @@ export class EditarEmpresaComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerLaData(); 
-   }
-
-   showForma() {
-     console.log(Object.keys(this.forma));
-     console.log(this.forma);
    }
 
   obtenerLaData() {
@@ -113,11 +108,21 @@ export class EditarEmpresaComponent implements OnInit {
   }
 
   esCodigoYaTomado(): void {
-    this.companiesService.isNameTaken(this.forma.get('Name').value).subscribe(isTaken => {
-      if (isTaken) {
-        this.forma.get('Name').setErrors({notUnique: true});
+    if (this.title === 'Nueva Empresa' ) {
+      this.companiesService.isNameTaken(this.forma.get('Name').value).subscribe(isTaken => {
+        if (isTaken) {
+          this.forma.get('Name').setErrors({notUnique: true});
+        }
+      });
+    } else {
+      if (this.selectedCompany.Nombre !== this.forma.get('Name').value) {
+        this.companiesService.isNameTaken(this.forma.get('Name').value).subscribe(isTaken => {
+          if (isTaken) {
+            this.forma.get('Name').setErrors({notUnique: true});
+          }
+        });
       }
-    });
+    }
   }
 
   onSubmit() {

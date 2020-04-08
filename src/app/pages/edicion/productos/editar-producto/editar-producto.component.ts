@@ -39,13 +39,12 @@ export class EditarProductoComponent implements OnInit, AfterViewChecked {
   subscriptions: Subscription[] = [];
 
   forma = this.fb.group({
-    Nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
-    Descripcion: ['', [Validators.maxLength(160)]],
+    Nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(35)]],
+    Descripcion: ['', [Validators.maxLength(200)]],
     Precio: ['', [Validators.required, Validators.min(0)]],
     Moneda: ['', [Validators.required]],
     WebSite: [''],
-    Logo: ['', imgValidation],
-    //Categorias: [''],
+    Logo: ['', imgValidation]
   });
 
   @ViewChild(SeleccionarCategoriaComponent) categoriasSortable: SeleccionarCategoriaComponent;
@@ -64,11 +63,15 @@ export class EditarProductoComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked() {
     if (this.yaCorrio === false && this.categoriasSortable) {
+      if (this.title === 'Editar Producto') {
         this.productsService.getAll().subscribe(productos => {
           let _selectedProduct = productos.find(p => p.Name === this.selectedProduct.Nombre);
           this.categoriasSortable.setSelectedCategories(_selectedProduct.Categories);
           this.yaCorrio = true;
         });
+      } else {
+        this.yaCorrio = true;
+      }        
     }
   }
 
@@ -101,7 +104,7 @@ export class EditarProductoComponent implements OnInit, AfterViewChecked {
             Precio: this.obtenerPrecio().precio,
             Moneda: idMoneda,
             WebSite: this.selectedProduct.WebSite,
-            Logo: this.formatLogo(this.selectedProduct.Logo),
+            Logo: this.selectedProduct.Logo
           });
         });
       });
@@ -117,15 +120,26 @@ export class EditarProductoComponent implements OnInit, AfterViewChecked {
   }
 
   formatLogo(logo: string) {
+    console.log('format logo', logo);
     return logo.substr(43,logo.length-45);
   }
 
   public esNombreYaTomado(): void {
-    this.productsService.isNameTaken(this.forma.get('Nombre').value).subscribe(isTaken => {
-      if (isTaken) {
-        this.forma.get('Nombre').setErrors({notUnique: true});
+    if (this.title === 'Nuevo Producto' ) {
+      this.productsService.isNameTaken(this.forma.get('Nombre').value).subscribe(isTaken => {
+        if (isTaken) {
+          this.forma.get('Nombre').setErrors({notUnique: true});
+        }
+      });
+    } else {
+      if (this.selectedProduct.Nombre !== this.forma.get('Nombre').value) {
+        this.productsService.isNameTaken(this.forma.get('Nombre').value).subscribe(isTaken => {
+          if (isTaken) {
+            this.forma.get('Nombre').setErrors({notUnique: true});
+          }
+        });
       }
-    });
+    }
   }
 
   onSubmit() {
@@ -152,13 +166,20 @@ export class EditarProductoComponent implements OnInit, AfterViewChecked {
       },
       error => this.error = error)
     } else {
-
+      this.productsService.getProductIdByName(this.selectedProduct.Nombre).subscribe(res => {
+        this.productsService.edit(res, reqProduct).subscribe(() => {
+          this.isLoading = false;
+          Swal.fire({
+            icon: 'success',
+            title: 'Se ha editado el producto',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          this.bsModalRef.hide();
+        },
+        error => this.error = error);
+      });
     }
-  }
-
-  showState() {
-    
-    console.log('categorias sortable',this.categoriasSortable);
   }
 
   eliminar() {

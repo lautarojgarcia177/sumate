@@ -24,6 +24,7 @@ import { Observable, forkJoin, pipe, Subscription } from 'rxjs';
 })
 export class CategoriasEdicionComponent implements OnInit{
   
+  allCategories;
   isLoading = true;
   
   limit = 10;
@@ -73,6 +74,7 @@ export class CategoriasEdicionComponent implements OnInit{
     .subscribe(([res1, res2]) => {
       //this.allproducts = res2;
       this.transformarCategorias(res1);
+      this.allCategories = res1;
       if (this.limit > res1.length) {
         this.limit = res1.length;
       }
@@ -221,8 +223,8 @@ export class CategoriasEdicionComponent implements OnInit{
   }
 
   onLimitChange(): void {
-    if(this.limitControl.value > this.limit) {
-      this.limitControl.setValue(this.limit);
+    if(this.limitControl.value > this.allCategories.length) {
+      this.limitControl.setValue(this.allCategories.length);
     }
     if(this.limitControl.value < 0) {
       this.limitControl.setValue(0);

@@ -186,8 +186,8 @@ export class EmpresasConsultaComponent implements OnInit {
   }
 
   onLimitChange(): void {
-    if(this.limitControl.value > this.limit) {
-      this.limitControl.setValue(this.limit);
+    if(this.limitControl.value > this.allCompanies.length) {
+      this.limitControl.setValue(this.allCompanies.length);
     }
     if(this.limitControl.value < 0) {
       this.limitControl.setValue(0);

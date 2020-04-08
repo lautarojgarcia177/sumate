@@ -16,6 +16,7 @@ import { Currency } from 'src/app/models/currency.model';
 export class MonedasConsultaComponent implements OnInit {
 
   isLoading = true;
+  allcurrencies;
 
   limit = 10;
   rows = [];
@@ -40,6 +41,7 @@ export class MonedasConsultaComponent implements OnInit {
   obtenerLaData(): void {
 
     this.currenciesService.getAll().subscribe(res => {
+      this.allcurrencies = res;
       this.transformarMonedas(res);
       if (this.limit > res.length) {
         this.limit = res.length;
@@ -50,8 +52,8 @@ export class MonedasConsultaComponent implements OnInit {
   }
 
   onLimitChange(): void {
-    if(this.limitControl.value > this.limit) {
-      this.limitControl.setValue(this.limit);
+    if(this.limitControl.value > this.allcurrencies.length) {
+      this.limitControl.setValue(this.allcurrencies.length);
     }
     if(this.limitControl.value < 0) {
       this.limitControl.setValue(0);

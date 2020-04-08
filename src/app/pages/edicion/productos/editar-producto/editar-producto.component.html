@@ -15,10 +15,10 @@
             El nombre es requerido
           </div>
           <div *ngIf="forma.get('Nombre').errors.minlength">
-            El nombre debe tener un mínimo de 3 letras
+            El nombre debe tener un mínimo de 3 caracteres
           </div>
           <div *ngIf="forma.get('Nombre').errors.maxlength">
-            El nombre debe tener un máximo de 25 letras
+            El nombre debe tener un máximo de 35 caracteres
           </div>
           <div *ngIf="forma.get('Nombre').errors.notUnique">
             El nombre ingresado ya existe
@@ -30,6 +30,11 @@
         <quill-editor id="descriptionFormControlInput"
          formControlName="Descripcion"
          ></quill-editor>
+         <div *ngIf="forma.get('Descripcion').invalid && (forma.get('Descripcion').dirty || forma.get('Descripcion').touched)" class="alert alert-danger">
+          <div *ngIf="forma.get('Descripcion').errors.maxlength">
+            Debe tener un máximo de 200 caracteres incluido el html
+          </div>
+        </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-7">
@@ -66,6 +71,9 @@
           <div *ngIf="forma.get('Logo').invalid && (forma.get('Logo').dirty || forma.get('Logo').touched)" class="alert alert-danger">
             <div *ngIf="forma.get('Logo').errors.validImgUrl">
               El formato de la imagen no es válido, debe ser png o jpg
+            </div>
+            <div *ngIf="!forma.get('Logo').errors.validImgUrl">
+              El formato de la imagen no es válido
             </div>
           </div>
           <div class="container mt-3">

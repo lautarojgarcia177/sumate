@@ -158,8 +158,8 @@ export class ProductosConsultaComponent implements OnInit {
   }
 
   onLimitChange(): void {
-    if(this.limitControl.value > this.limit) {
-      this.limitControl.setValue(this.limit);
+    if(this.limitControl.value > this.allProducts.length) {
+      this.limitControl.setValue(this.allProducts.length);
     }
     if(this.limitControl.value < 0) {
       this.limitControl.setValue(0);

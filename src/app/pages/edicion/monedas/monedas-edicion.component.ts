@@ -16,6 +16,7 @@ import { EditarMonedaComponent } from './editar-moneda/editar-moneda.component';
 })
 export class MonedasEdicionComponent implements OnInit {
 
+  allCurrencies;
   isLoading = true;
 
   limit = 10;
@@ -47,6 +48,7 @@ export class MonedasEdicionComponent implements OnInit {
   obtenerLaData(): void {
 
     this.currenciesService.getAll().subscribe(res => {
+      this.allCurrencies = res;
       this.transformarMonedas(res);
       if (this.limit > res.length) {
         this.limit = res.length;
@@ -57,8 +59,8 @@ export class MonedasEdicionComponent implements OnInit {
   }
 
   onLimitChange(): void {
-     if(this.limitControl.value > this.limit) {
-       this.limitControl.setValue(this.limit);
+     if(this.limitControl.value > this.allCurrencies.length) {
+       this.limitControl.setValue(this.allCurrencies.length);
      }
      if(this.limitControl.value < 0) {
        this.limitControl.setValue(0);

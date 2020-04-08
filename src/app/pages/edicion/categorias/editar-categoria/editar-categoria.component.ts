@@ -122,11 +122,21 @@ export class EditarCategoriaComponent implements OnInit {
   }
 
   public esNombreYaTomado(): void {
+    if (this.title === 'Nueva Categorialo' ) {
       this.categoriesService.isNameTaken(this.forma.get('Name').value).subscribe(isTaken => {
         if (isTaken) {
           this.forma.get('Name').setErrors({notUnique: true});
         }
       });
+    } else {
+      if (this.selectedCategory.Nombre !== this.forma.get('Name').value) {
+        this.categoriesService.isNameTaken(this.forma.get('Name').value).subscribe(isTaken => {
+          if (isTaken) {
+            this.forma.get('Name').setErrors({notUnique: true});
+          }
+        });
+      }
+    }
   }
 
   private generarArrayDeIdsProductos(arr: Product[]): number[] {
