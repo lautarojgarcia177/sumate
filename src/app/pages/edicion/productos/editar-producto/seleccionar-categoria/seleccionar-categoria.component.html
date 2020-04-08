@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+        <label>Categorias</label>
+        <p>Arrastre hacia la caja de la izquierda las categorias que correspondan</p>
+        <div class="col border rounded">
+            <bs-sortable style="padding: 1px;"
+            [(ngModel)]="itemsLeft"
+            fieldName="Name"
+            itemClass="sortable-item"
+            itemActiveClass="sortable-item-active"
+            placeholderItem="Arrastre aqui"
+            placeholderClass="placeholderStyle"
+            wrapperClass="sortable-wrapper"
+          ></bs-sortable>
+        </div>
+        <div class="col">
+            <bs-sortable
+            [(ngModel)]="itemsRight"
+            fieldName="Name"
+            itemClass="sortable-item"
+            itemActiveClass="sortable-item-active"
+            placeholderItem="No hay mas categorias"
+            placeholderClass="placeholderStyle"
+            wrapperClass="sortable-wrapper"
+          ></bs-sortable>
+        </div>
+    </div>
+</div>

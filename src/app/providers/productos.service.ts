@@ -12,8 +12,7 @@ import { CurrenciesService } from './currencies.service';
 export class ProductosService extends GenericService<Product> {
 
   constructor(protected http: HttpClient,
-              protected errorHandlerService: HelperErrorHandlerService,
-              private currenciesService: CurrenciesService) { 
+              protected errorHandlerService: HelperErrorHandlerService) { 
     super(http, errorHandlerService, '*/products')
   }
 

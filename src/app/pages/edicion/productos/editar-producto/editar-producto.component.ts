@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ProductosService } from 'src/app/providers/productos.service';
 import { CurrenciesService } from 'src/app/providers/currencies.service';
 import Swal from 'sweetalert2';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CategoriasService } from 'src/app/providers/categorias.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { Currency } from 'src/app/models/currency.model';
 import { Category } from 'src/app/models/categoria.model';
 import { imgValidation } from 'src/app/shared/custom-validators/img-validation';
+import { SeleccionarCategoriaComponent } from './seleccionar-categoria/seleccionar-categoria.component';
+import { Product } from 'src/app/models/product.model';
 
 @Component({
   selector: 'app-editar-producto',
@@ -31,21 +33,27 @@ export class EditarProductoComponent implements OnInit {
 
   nullimg: string = '/assets/img/no-img-placeholder.png';
 
+  modalRef: BsModalRef;
+  subscriptions: Subscription[] = [];
+
   forma = this.fb.group({
     Nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
-    Descripcion: [''],
+    Descripcion: ['', [Validators.maxLength(160)]],
     Precio: ['', [Validators.required, Validators.min(0)]],
     Moneda: ['', [Validators.required]],
     WebSite: [''],
     Logo: ['', imgValidation],
     //Categorias: [''],
-  })
+  });
+
+  @ViewChild(SeleccionarCategoriaComponent) categoriasSortable: SeleccionarCategoriaComponent;
 
   constructor(public bsModalRef: BsModalRef,
               private productsService: ProductosService,
               private currenciesService: CurrenciesService,
               private categoriesService: CategoriasService,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder,
+              private bsModalService: BsModalService) { }
 
   ngOnInit(): void {
     this.obtenerLaData();
@@ -58,7 +66,9 @@ export class EditarProductoComponent implements OnInit {
       this.currenciesService.getAll(),
       this.categoriesService.getAll()
     ).subscribe(([products, currencies, categories]) => {
-      this.selectedProduct.Descripcion = products.filter(c => c.Name === this.selectedProduct.Nombre)[0].Description;
+      if (this.selectedProduct) {
+        this.selectedProduct.Descripcion = products.filter(c => c.Name === this.selectedProduct.Nombre)[0].Description;
+      }
       this.allcurrencies = currencies;
       this.allCategories = categories;
       this.isLoading = false;
@@ -67,7 +77,26 @@ export class EditarProductoComponent implements OnInit {
 
   inicializarFormulario(): void {
     if (this.title === 'Editar Producto') {
+      console.log(this.selectedProduct);
+      this.currenciesService.getCurrencyIdByCode(this.obtenerPrecio().moneda).subscribe(idMoneda => {
+        this.forma.reset({
+          Nombre: this.selectedProduct.Nombre,
+          Descripcion: this.selectedProduct.Descripcion,
+          Precio: this.obtenerPrecio().precio,
+          Moneda: idMoneda,
+          WebSite: this.selectedProduct.WebSite,
+          Logo: this.formatLogo(this.selectedProduct.Logo),
+        });
+      });
+    }
+  }
 
+  obtenerPrecio() {
+    const precioYMoneda = this.selectedProduct.Precio.split(' ');
+    //const idMoneda = this.allcurrencies.find(c => c.Code == precioYMoneda[1]);
+    return {
+      precio: precioYMoneda[0],
+      moneda: precioYMoneda[1]
     }
   }
 
@@ -76,15 +105,39 @@ export class EditarProductoComponent implements OnInit {
   }
 
   public esNombreYaTomado(): void {
-    this.productsService.isNameTaken(this.forma.get('Name').value).subscribe(isTaken => {
+    this.productsService.isNameTaken(this.forma.get('Nombre').value).subscribe(isTaken => {
       if (isTaken) {
-        this.forma.get('Name').setErrors({notUnique: true});
+        this.forma.get('Nombre').setErrors({notUnique: true});
       }
     });
   }
 
   onSubmit() {
+    this.isLoading = true;
+    const reqProduct: Product = {
+      Name: this.forma.get('Nombre').value,
+      Description: this.forma.get('Descripcion').value,
+      Logo: this.forma.get('Logo').value,
+      WebSite: this.forma.get('WebSite').value,
+      Price: this.forma.get('Precio').value,
+      CurrencyId: this.forma.get('Moneda').value,
+      Categories: this.categoriasSortable.selectedCategories
+    }
+    if (this.title === 'Nuevo Producto') {
+      this.productsService.add(reqProduct).subscribe(() => {
+        this.isLoading = false;
+        Swal.fire({
+          icon: 'success',
+          title: 'Se ha registrado el nuevo producto',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        this.bsModalRef.hide();
+      },
+      error => this.error = error)
+    } else {
 
+    }
   }
 
   eliminar() {

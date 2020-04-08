@@ -13,6 +13,23 @@
   cursor: pointer;
 }
 
+.sortable-item {
+  background-color: rgb(243, 243, 243);
+  font-weight: bold;
+  border: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  border-color: darkgrey;
+  text-align: center;
+  width: 180px;
+  margin: 2px;
+}
+
+.sortable-item-active {
+  background-color: rgb(49, 126, 189);
+  color: white
+}
+
 @charset "UTF-8";
 
 /*!

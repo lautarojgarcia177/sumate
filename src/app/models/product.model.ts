@@ -8,5 +8,5 @@ export class Product {
     Price?: number;
     CurrencyId?: number;
     Categories: number[];
-    PriceWithCurrency: string;
+    PriceWithCurrency?: string;
 }

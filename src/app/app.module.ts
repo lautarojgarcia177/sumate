@@ -12,6 +12,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { QuillModule } from 'ngx-quill';
 import { BsDatepickerModule} from 'ngx-bootstrap/datepicker';
+import { SortableModule } from 'ngx-bootstrap/sortable';
 
 import { CardComponent } from './components/ui/card/card.component';
 import { SubcardComponent } from './components/ui/card/subcard/subcard.component';
@@ -39,6 +40,7 @@ import {EmpresaDetalleComponent} from 'src/app/pages/consulta/empresas/empresa-d
 import { EditarEmpresaComponent } from 'src/app/pages/edicion/empresas/editar-empresa/editar-empresa.component';
 import { ProductosDetalleComponent } from './pages/consulta/productos/productos-detalle/productos-detalle.component';
 import { EditarProductoComponent } from './pages/edicion/productos/editar-producto/editar-producto.component';
+import { SeleccionarCategoriaComponent } from './pages/edicion/productos/editar-producto/seleccionar-categoria/seleccionar-categoria.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,8 @@ import { EditarProductoComponent } from './pages/edicion/productos/editar-produc
     EmpresaDetalleComponent,
     EditarEmpresaComponent,
     ProductosDetalleComponent,
-    EditarProductoComponent
+    EditarProductoComponent,
+    SeleccionarCategoriaComponent
   ],
   imports: [
     BrowserModule,
@@ -82,6 +85,7 @@ import { EditarProductoComponent } from './pages/edicion/productos/editar-produc
       theme: 'snow'
     }),
     BsDatepickerModule.forRoot(),
+    SortableModule.forRoot()
   ],
   providers: [
     httpInterceptorProviders
