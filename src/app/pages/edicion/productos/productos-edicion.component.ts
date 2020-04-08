@@ -170,6 +170,7 @@ export class ProductosEdicionComponent implements OnInit {
           selectedProduct: event.selected[0]
         }
       }
+
       this.modalRef = this.bsModalService.show(EditarProductoComponent, config);
   
       this.subscriptions.push(

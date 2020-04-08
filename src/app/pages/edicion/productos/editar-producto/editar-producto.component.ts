@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, AfterViewChecked, AfterContentInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ProductosService } from 'src/app/providers/productos.service';
 import { CurrenciesService } from 'src/app/providers/currencies.service';
@@ -18,7 +18,7 @@ import { Product } from 'src/app/models/product.model';
   styleUrls: ['./editar-producto.component.css'],
   providers: [ProductosService, CurrenciesService, CategoriasService]
 })
-export class EditarProductoComponent implements OnInit {
+export class EditarProductoComponent implements OnInit, AfterViewChecked {
 
   title: string;
   selectedProduct;
@@ -30,6 +30,8 @@ export class EditarProductoComponent implements OnInit {
 
   isLoading = true;
   Swal = Swal;
+
+  yaCorrio = false;
 
   nullimg: string = '/assets/img/no-img-placeholder.png';
 
@@ -60,6 +62,16 @@ export class EditarProductoComponent implements OnInit {
     this.inicializarFormulario();
   }
 
+  ngAfterViewChecked() {
+    if (this.yaCorrio === false && this.categoriasSortable) {
+        this.productsService.getAll().subscribe(productos => {
+          let _selectedProduct = productos.find(p => p.Name === this.selectedProduct.Nombre);
+          this.categoriasSortable.setSelectedCategories(_selectedProduct.Categories);
+          this.yaCorrio = true;
+        });
+    }
+  }
+
   obtenerLaData(): void {
     forkJoin(
       this.productsService.getAll(),
@@ -77,15 +89,20 @@ export class EditarProductoComponent implements OnInit {
 
   inicializarFormulario(): void {
     if (this.title === 'Editar Producto') {
-      console.log(this.selectedProduct);
       this.currenciesService.getCurrencyIdByCode(this.obtenerPrecio().moneda).subscribe(idMoneda => {
-        this.forma.reset({
-          Nombre: this.selectedProduct.Nombre,
-          Descripcion: this.selectedProduct.Descripcion,
-          Precio: this.obtenerPrecio().precio,
-          Moneda: idMoneda,
-          WebSite: this.selectedProduct.WebSite,
-          Logo: this.formatLogo(this.selectedProduct.Logo),
+        this.productsService.getAll().subscribe(productos => {
+          let _selectedProduct = productos.find(p => p.Name === this.selectedProduct.Nombre);
+          this.selectedProduct.Descripcion = _selectedProduct.Description;
+          this.selectedProduct.WebSite = _selectedProduct.WebSite;
+          this.selectedProduct.Logo = _selectedProduct.Logo;
+          this.forma.reset({
+            Nombre: this.selectedProduct.Nombre,
+            Descripcion: this.selectedProduct.Descripcion,
+            Precio: this.obtenerPrecio().precio,
+            Moneda: idMoneda,
+            WebSite: this.selectedProduct.WebSite,
+            Logo: this.formatLogo(this.selectedProduct.Logo),
+          });
         });
       });
     }
@@ -93,7 +110,6 @@ export class EditarProductoComponent implements OnInit {
 
   obtenerPrecio() {
     const precioYMoneda = this.selectedProduct.Precio.split(' ');
-    //const idMoneda = this.allcurrencies.find(c => c.Code == precioYMoneda[1]);
     return {
       precio: precioYMoneda[0],
       moneda: precioYMoneda[1]
@@ -138,6 +154,11 @@ export class EditarProductoComponent implements OnInit {
     } else {
 
     }
+  }
+
+  showState() {
+    
+    console.log('categorias sortable',this.categoriasSortable);
   }
 
   eliminar() {

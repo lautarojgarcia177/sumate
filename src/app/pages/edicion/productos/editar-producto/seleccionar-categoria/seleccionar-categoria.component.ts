@@ -16,17 +16,6 @@ export class SeleccionarCategoriaComponent implements OnInit {
   itemsLeft: Category[] = [];
   itemsRight: Category[] = [];
 
-  itemStringsLeft = [
-  ]; 
-  itemStringsRight = [
-    'Windstorm',
-    'Bombasto',
-    'Magneta',
-    'Tornado',
-    'Mr. O',
-    'Tomato'
-  ];
-
   constructor() { }
 
   ngOnInit(): void {
@@ -35,6 +24,18 @@ export class SeleccionarCategoriaComponent implements OnInit {
 
   get selectedCategories(): number[] {
     return this.itemsLeft.map(item => item["Id"]);
+  }
+
+  public hola():void {
+    console.log('been here');
+  }
+
+  setSelectedCategories(categories: number[]) {
+    categories.forEach(cId => {
+      this.itemsLeft.push(this.allcategories.find(cat => cat.Id === cId));
+      const indexARemover = this.itemsRight.indexOf(this.itemsRight.find(item => item.Id === cId));
+      this.itemsRight.splice(indexARemover, 1);
+    });    
   }
 
 }
