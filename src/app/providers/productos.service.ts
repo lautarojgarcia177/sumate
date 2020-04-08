@@ -47,6 +47,17 @@ export class ProductosService extends GenericService<Product> {
     return obs;
   }
 
+  public getProductIdByName(name: string): Observable<any> {
+    let obs = new Observable(suscriber => {
+      this.getAll().subscribe((res: Array<any>) => {
+        const id = res.find(c => c.Name === name).Id;
+        suscriber.next(id);
+        suscriber.complete();
+      })
+    });
+    return obs;
+  }
+
   public isNameTaken(code: string): Observable<boolean> {
     const obs = new Observable<boolean>(suscriber => {
       this.getAll().subscribe(res => {

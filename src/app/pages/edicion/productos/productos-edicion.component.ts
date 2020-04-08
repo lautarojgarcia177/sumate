@@ -8,7 +8,7 @@ import { EditarProductoComponent } from './editar-producto/editar-producto.compo
 import { ProductosService } from 'src/app/providers/productos.service';
 import { Product } from 'src/app/models/product.model';
 import { CurrenciesService } from 'src/app/providers/currencies.service';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-productos-edicion',
@@ -42,6 +42,7 @@ export class ProductosEdicionComponent implements OnInit {
     @ViewChild(DatatableComponent, { static: false }) table: DatatableComponent;
   
     modalRef: BsModalRef;
+    subscriptions: Subscription[] = [];
   
     constructor(private productosService: ProductosService,
                 private currenciesService: CurrenciesService,
@@ -143,15 +144,39 @@ export class ProductosEdicionComponent implements OnInit {
       window.location.reload();
     }
   
-    verDetalleProducto(event) {
+    nuevoProducto() {
       const config = {
         keyboard: true,
         initialState: {
+          title: 'Nuevo Producto'
+        }
+      };
+      this.modalRef = this.bsModalService.show(EditarProductoComponent, config);
+  
+      this.subscriptions.push(
+        this.bsModalService.onHide.subscribe((reason: string) => {
+          if(reason !== 'backdrop-click') {
+            this.refreshTable();
+          }
+        })
+      );
+    }
+
+    editarProducto(event) {
+      const config = {
+        keyboard: true,
+        initialState: {
+          title: 'Editar Producto',
           selectedProduct: event.selected[0]
         }
       }
       this.modalRef = this.bsModalService.show(EditarProductoComponent, config);
   
+      this.subscriptions.push(
+        this.bsModalService.onHide.subscribe(() => {
+          this.refreshTable()
+        })
+      );
     }
   
     hoverRed(row) {
