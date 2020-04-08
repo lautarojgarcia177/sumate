@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{selectedProduct.Nombre}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+    <div class="form-group" *ngIf="selectedProduct.Descripcion">
+      <label for="descriptionFormControlInput">Descripción</label>
+      <div class="border rounded p-2"
+       [innerHTML]="selectedProduct.Descripcion">
+      </div>
+      </div>
+      <div class="form-group" *ngIf="!selectedProduct.Descripcion">
+        <label for="descriptionFormControlInput">No hay descripción registrada para esta empresa</label>
+      </div>
+  </div>

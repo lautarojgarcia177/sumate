@@ -3,9 +3,10 @@ export class Product {
     Name: string;
     Description: string;
     Logo: string;
-    Website: string;
+    WebSite: string;
     CompanyId?: number;
     Price?: number;
     CurrencyId?: number;
     Categories: number[];
+    PriceWithCurrency: string;
 }

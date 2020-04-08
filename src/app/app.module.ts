@@ -37,6 +37,8 @@ import { AnimatedCheckboxComponent } from './components/animated-checkbox/animat
 import { EditarMonedaComponent } from './pages/edicion/monedas/editar-moneda/editar-moneda.component';
 import {EmpresaDetalleComponent} from 'src/app/pages/consulta/empresas/empresa-detalle/empresa-detalle.component';
 import { EditarEmpresaComponent } from 'src/app/pages/edicion/empresas/editar-empresa/editar-empresa.component';
+import { ProductosDetalleComponent } from './pages/consulta/productos/productos-detalle/productos-detalle.component';
+import { EditarProductoComponent } from './pages/edicion/productos/editar-producto/editar-producto.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,9 @@ import { EditarEmpresaComponent } from 'src/app/pages/edicion/empresas/editar-em
     AnimatedCheckboxComponent,
     EditarMonedaComponent,
     EmpresaDetalleComponent,
-    EditarEmpresaComponent
+    EditarEmpresaComponent,
+    ProductosDetalleComponent,
+    EditarProductoComponent
   ],
   imports: [
     BrowserModule,

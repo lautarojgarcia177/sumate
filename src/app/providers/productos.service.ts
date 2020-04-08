@@ -1,9 +1,10 @@
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../models/product.model';
 import { HelperErrorHandlerService } from './helper-error-handler.service';
 import { GenericService } from './generic.service';
+import { CurrenciesService } from './currencies.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ import { GenericService } from './generic.service';
 export class ProductosService extends GenericService<Product> {
 
   constructor(protected http: HttpClient,
-              protected errorHandlerService: HelperErrorHandlerService) { 
+              protected errorHandlerService: HelperErrorHandlerService,
+              private currenciesService: CurrenciesService) { 
     super(http, errorHandlerService, '*/products')
   }
 

@@ -26,7 +26,6 @@ export class EmpresasConsultaComponent implements OnInit {
   selected = [];
   columns = [
     {prop: 'Nombre'},
-    //{prop: 'Descripcion'},
     {prop: 'Website'},
     {prop: 'Logo'},
     {prop: 'Email'},
@@ -102,7 +101,7 @@ export class EmpresasConsultaComponent implements OnInit {
 
   formatearWebsite(website: string): string {
     if (website) { 
-      if (website.startsWith('https://')) {
+      if (website.startsWith('https://') || website.startsWith('http://')) {
         const inicio = ' <a href="';
         const mid = '" target="_blank" >';
         const fin = '</a>';
